@@ -1,20 +1,45 @@
-var app, express, io, server;
+var connectHandler, createRoomHandler, disconnectHandler, io, joinRoomHandler, server,
+  _this = this;
 
-express = require('express');
-
-app = express();
-
-server = require('http').createServer(app).listen(8080);
+server = require('http').createServer().listen(1234);
 
 io = require('socket.io').listen(server);
-
-app.get('/', function(req, res) {
-  return console.log('woop');
-});
 
 io.sockets.on('connection', function(socket) {
   return console.log('client connected');
 });
+
+socket.on('connect', function(data) {
+  return connectHandler();
+});
+
+socket.on('disconnect', function(data) {
+  return disconnectHandler();
+});
+
+socket.on('createRoom', function(data) {
+  return createRoomHandler();
+});
+
+socket.on('joinRoom', function(data) {
+  return joinRoomHandler();
+});
+
+connectHandler = function() {
+  return console.log('connectHandler');
+};
+
+disconnectHandler = function() {
+  return console.log('disconnectHandler');
+};
+
+createRoomHandler = function() {
+  return console.log('createRoomHandler');
+};
+
+joinRoomHandler = function() {
+  return console.log('joinRoomHandler');
+};
 
 /*
 //@ sourceMappingURL=server.js.map

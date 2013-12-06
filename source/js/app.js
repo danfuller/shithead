@@ -1,11 +1,23 @@
 define(["jquery", "io"], function($, io) {
   var App;
   return App = (function() {
-    App.IO = {};
+    App.USER = {};
+
+    App.GAME = {};
 
     function App() {
-      App.IO.socket = io.connect('http://localhost:8080');
+      console.log('constructor', this);
+      App.USER.socket = io.connect('http://localhost:1234');
+      this._userConnect();
     }
+
+    App.prototype._userConnect = function() {
+      console.log('uC');
+      console.log(this);
+      return App.USER.socket.emit('connect', {
+        name: 'jimmy'
+      });
+    };
 
     return App;
 

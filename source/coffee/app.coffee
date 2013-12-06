@@ -2,7 +2,18 @@ define ["jquery","io"], ($,io) ->
 
 	class App
 
-		@IO = {}
+		@USER = {}
+		@GAME = {}
 
 		constructor: ->
-			App.IO.socket = io.connect('http://localhost:8080');
+			console.log 'constructor', @
+
+			App.USER.socket = io.connect('http://localhost:1234');
+
+			@_userConnect()
+
+
+		_userConnect: ->
+			console.log 'uC'
+			console.log @
+			App.USER.socket.emit 'connect', { name: 'jimmy' }
