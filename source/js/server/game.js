@@ -24,8 +24,9 @@ Game = (function() {
   Game.prototype.joinGame = function(socket) {
     this.players.push(socket);
     if (this.players.length === this.maxPlayers) {
-      return this.dealCards;
+      this.dealCards;
     }
+    return console.log(this.players);
   };
 
   Game.prototype.dealCards = function() {};

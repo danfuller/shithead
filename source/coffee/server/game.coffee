@@ -21,7 +21,7 @@ class Game
 		if @players.length is @maxPlayers
 			@dealCards
 		
-		#console.log @players
+		console.log @players
 
 	dealCards: ->
 		

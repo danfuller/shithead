@@ -3,8 +3,11 @@ server = require('http').createServer().listen(1234)
 io = require('socket.io').listen(server)
 
 Game = require('./game').Game
+User = require('./user').User
 
 game = null
+
+users = []
 
 
 # Socket Events
@@ -12,15 +15,18 @@ io.sockets.on 'connection', (socket) =>
 	console.log 'client connected'
 
 	socket.on 'connect', (data) =>
-		connectHandler()
+		connectHandler(socket)
+
+		###		
 		if connectedUsers() is 1
 			createGame(socket)
 			joinGame(socket)
 		else if connectedUsers() is 2
 			joinGame(socket)
+		###
 
 	socket.on 'disconnect', (data) =>
-		disconnectHandler()
+		disconnectHandler(socket)
 
 	socket.on 'createRoom', (data) =>
 		createRoomHandler()
@@ -30,11 +36,31 @@ io.sockets.on 'connection', (socket) =>
 
 
 # Socket Event Handlers
-connectHandler = ->
+connectHandler = (socket) =>
 	console.log 'connectHandler'
+	
+	# Create new user, add to stored users
+	users.push(new User(socket.id))
 
-disconnectHandler = ->
+	# Emit updated users to all
+	io.sockets.emit 'users_updated', users
+
+
+disconnectHandler = (socket) =>
 	console.log 'disconnectHandler'
+
+	console.log users
+
+	# Remove user from users
+	for user, key in users
+		console.log user, key
+		if user.id is socket.id
+			users.splice key, 1
+			break
+
+	console.log users
+
+	io.sockets.emit 'users_updated', users
 
 createRoomHandler = ->
 	console.log 'createRoomHandler'

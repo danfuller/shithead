@@ -5,9 +5,24 @@ define ["jquery","io"], ($,io) ->
 		@USER = {}
 		@GAME = {}
 
+		connectedUsers = []
+
 		constructor: ->
 			App.USER.socket = io.connect('http://localhost:1234');
-			@_userConnect()
+			@socketEvents()
 
-		_userConnect: ->
+			@userConnect()
+
+		userConnect: ->
 			App.USER.socket.emit 'connect', { name: 'jimmy' }
+
+		socketEvents: ->
+			console.log 'socketEvents'
+
+			App.USER.socket.on 'users_updated', (data) ->
+				$('body').html('')
+				connectedUsers = data
+				$.each connectedUsers, (i,x) ->
+					$('body').append('<div>'+i+'__'+x.id+'</div>')
+				
+				console.log data
